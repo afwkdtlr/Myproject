@@ -3,139 +3,225 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%
-  /**
-  * @Class Name : egovSampleList.jsp
-  * @Description : Sample List 화면
-  * @Modification Information
-  *
-  *   수정일         수정자                   수정내용
-  *  -------    --------    ---------------------------
-  *  2009.02.01            최초 생성
-  *
-  * author 실행환경 개발팀
-  * since 2009.02.01
-  *
-  * Copyright (C) 2009 by MOPAS  All right reserved.
-  */
-%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><spring:message code="title.sample" /></title>
-    <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>"/>
-    <script type="text/javaScript" language="javascript" defer="defer">
-        <!--
-        /* 글 수정 화면 function */
-        function fn_egov_select(id) {
-        	document.listForm.selectedId.value = id;
-           	document.listForm.action = "<c:url value='/updateSampleView.do'/>";
-           	document.listForm.submit();
-        }
-        
-        /* 글 등록 화면 function */
-        function fn_egov_addView() {
-           	document.listForm.action = "<c:url value='/addSample.do'/>";
-           	document.listForm.submit();
-        }
-        
-        /* 글 목록 화면 function */
-        function fn_egov_selectList() {
-        	document.listForm.action = "<c:url value='/egovSampleList.do'/>";
-           	document.listForm.submit();
-        }
-        
-        /* pagination 페이지 링크 function */
-        function fn_egov_link_page(pageNo){
-        	document.listForm.pageIndex.value = pageNo;
-        	document.listForm.action = "<c:url value='/egovSampleList.do'/>";
-           	document.listForm.submit();
-        }
-        
-        //-->
-    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> </link>
+    <style type="text/css">
+		.footer {
+		   width:100%;
+		   height:100px;
+		   position:absolute;
+		   bottom:0;
+		  text-align: center;
+		  color: white;
+		}
+	</style>
 </head>
 
 <body style="text-align:center; margin:0 auto; display:inline; padding-top:100px;">
-    <form:form commandName="searchVO" id="listForm" name="listForm" method="post">
-        <input type="hidden" name="selectedId" />
-        <div id="content_pop">
-        	<!-- 타이틀 -->
-        	<div id="title">
-        		<ul>
-        			<li><img src="<c:url value='/images/egovframework/example/title_dot.gif'/>" alt=""/><spring:message code="list.sample" /></li>
-        		</ul>
-        	</div>
-        	<!-- // 타이틀 -->
-        	<div id="search">
-        		<ul>
-        			<li>
-        			    <label for="searchCondition" style="visibility:hidden;"><spring:message code="search.choose" /></label>
-        				<form:select path="searchCondition" cssClass="use">
-        					<form:option value="1" label="Name" />
-        					<form:option value="0" label="ID" />
-        				</form:select>
-        			</li>
-        			<li><label for="searchKeyword" style="visibility:hidden;display:none;"><spring:message code="search.keyword" /></label>
-                        <form:input path="searchKeyword" cssClass="txt"/>
-                    </li>
-        			<li>
-        	            <span class="btn_blue_l">
-        	                <a href="javascript:fn_egov_selectList();"><spring:message code="button.search" /></a>
-        	                <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
-        	            </span>
-        	        </li>
-                </ul>
-        	</div>
-        	<!-- List -->
-        	<div id="table">
-        		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="카테고리ID, 케테고리명, 사용여부, Description, 등록자 표시하는 테이블">
-        			<caption style="visibility:hidden">카테고리ID, 케테고리명, 사용여부, Description, 등록자 표시하는 테이블 깃허브테스트</caption>
-        			<colgroup>
-        				<col width="40"/>
-        				<col width="100"/>
-        				<col width="150"/>
-        				<col width="80"/>
-        				<col width="?"/>
-        				<col width="60"/>
-        			</colgroup>
-        			<tr>
-        				<th align="center">No</th>
-        				<th align="center"><spring:message code="title.sample.id" /></th>
-        				<th align="center"><spring:message code="title.sample.name" /></th>
-        				<th align="center"><spring:message code="title.sample.useYn" /></th>
-        				<th align="center"><spring:message code="title.sample.description" /></th>
-        				<th align="center"><spring:message code="title.sample.regUser" /></th>
-        			</tr>
-        			<c:forEach var="result" items="${resultList}" varStatus="status">
-            			<tr>
-            				<td align="center" class="listtd"><c:out value="${paginationInfo.totalRecordCount+1 - ((searchVO.pageIndex-1) * searchVO.pageSize + status.count)}"/></td>
-            				<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.id}"/>')"><c:out value="${result.id}"/></a></td>
-            				<td align="left" class="listtd"><c:out value="${result.name}"/>&nbsp;</td>
-            				<td align="center" class="listtd"><c:out value="${result.useYn}"/>&nbsp;</td>
-            				<td align="center" class="listtd"><c:out value="${result.description}"/>&nbsp;</td>
-            				<td align="center" class="listtd"><c:out value="${result.regUser}"/>&nbsp;</td>
-            			</tr>
-        			</c:forEach>
-        		</table>
-        	</div>
-        	<!-- /List -->
-        	<div id="paging">
-        		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-        		<form:hidden path="pageIndex" />
-        	</div>
-        	<div id="sysbtn">
-        	  <ul>
-        	      <li>
-        	          <span class="btn_blue_l">
-        	              <a href="javascript:fn_egov_addView();"><spring:message code="button.create" /></a>
-                          <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
-                      </span>
-                  </li>
-              </ul>
-        	</div>
-        </div>
-    </form:form>
+	<%@ include file = "../../../../html/header.jsp" %>
+	<main class="mt-3">
+		<div class="container">
+			<!-- 행만들기 마진3-->
+			<div class="row mb-2">
+				<div class="col-12">
+					<select class="form-select">
+					  <option selected></option>
+					  <option value="1">면류</option>
+					  <option value="2">밥류</option>
+					  <option value="3">특별식</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="row g-3">
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_0bba4c436a2c4f6f801777c6014791f2~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">부대찌개 </h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">살쪄</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">국물</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">8,000원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+				
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_d00488b6f4bf40b6ad57be52466c39ab~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">김치찌개</h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">살쪄</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">국물</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">7,000원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+				
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_58c0a28652314b51b24c900b732edc94~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">돈까스 카레</h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">살쪄</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">오뚜기</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">7,500원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+				
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_b2c39dcd63ad4fbbb6c96d256eeb21d2~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">김치찜</h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">자극적</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">김치</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">9,000원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+				
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_966ce63b1fa3487f9d24b34cfa3eb36f~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">닭볶음탕</h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">자극적</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">김치</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">9,000원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+				
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_5aa628de23c04ca3832ffd119d4d2f89~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">차돌된장찌개</h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">자극적</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">김치</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">9,000원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+				
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_b0bd074a5fb945bea374750ecd4392d4~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">소불고기</h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">자극적</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">김치</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">9,000원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+				
+				<div class="col-xl-3 col-lg-4 col-md-6">
+					<div class="card" style="width: 18rem;">
+					  <img src="https://static.wixstatic.com/media/7a7901_98366a3a29f14f8cbe4dcccc006dba0a~mv2.jpg" class="card-img-top" alt="..."></img>
+					  <div class="card-body">
+					    <h5 class="card-title">떡볶이</h5>
+					    <p class="card-text">
+					    	<span class="badge bg-dark">자극적</span>
+					    	<span class="badge bg-dark">밥류</span>
+					    	<span class="badge bg-dark">김치</span>
+						</p>
+						<div class ="d-flex justify-content-between align-items-conter">
+							<div class="btn-group" role="group">
+							  <button type="button" class="btn btn-sm btn-outline-secondary">장바구니</button>
+							  <button type="button" class="btn btn-sm btn-outline-secondary">주문하기</button>
+							</div>
+							<h5 class="text-dart">9,000원</h5>
+						</div>
+
+					  </div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</main>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    
+	
+<%@ include file = "../../../../html/footer.jsp" %>	
 </body>
+
 </html>
